@@ -1,6 +1,6 @@
 import chromium from '@sparticuz/chromium-min'
 import puppeteer from 'puppeteer-core'
-import { executablePath } from 'puppeteer'
+// import { executablePath } from 'puppeteer'
 
 async function getBrowser() {
   //   // local development is broken for this 👇
@@ -12,12 +12,12 @@ async function getBrowser() {
       '--disable-web-security',
       '--arch=arm64',
     ],
-    defaultViewport: chromium.defaultViewport,
-    executablePath: executablePath(),
-
-    // executablePath: await chromium.executablePath(
-    //   `https://github.com/Sparticuz/chromium/releases/download/v119.0.2/chromium-v119.0.2-pack.tar`
-    // ),
+	  defaultViewport: chromium.defaultViewport,
+	// For dev
+    // executablePath: executablePath(),
+    executablePath: await chromium.executablePath(
+      `https://github.com/Sparticuz/chromium/releases/download/v119.0.2/chromium-v119.0.2-pack.tar`
+    ),
     headless: chromium.headless,
     ignoreHTTPSErrors: true,
   })
