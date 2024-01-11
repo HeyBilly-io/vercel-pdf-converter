@@ -1,4 +1,4 @@
-const { getPdf } = require('../service/convert')
+// const { getPdf } = require('../service/convert')
 const { getPdfStream } = require('../service/convert')
 
 // Cache header max age
@@ -26,7 +26,9 @@ module.exports = async (req, res) => {
 
     // Set Content type to PDF and send the PDF to the client
     res.setHeader('Content-type', 'application/pdf')
-    const pdfStream = await getPdfStream(url)
+
+    const isDev = req?.headers?.host?.startsWith('localhost') ?? false
+    const pdfStream = await getPdfStream(url, isDev)
 
     pdfStream.pipe(res)
   } catch (err) {
@@ -37,6 +39,6 @@ module.exports = async (req, res) => {
       return res.status(404).end()
 
     console.error(err)
-    res.status(500).send('Error: Please try again.')
+    res.status(500).send('Error: ' + err)
   }
 }
