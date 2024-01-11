@@ -79,3 +79,8 @@ This project was developed by me ([@betahuhn](https://github.com/BetaHuhn)) in m
 Copyright 2020 Maximilian Schiller
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+
+## Local fix
+
+https://github.com/berstend/puppeteer-extra/issues/730#issuecomment-1289776341

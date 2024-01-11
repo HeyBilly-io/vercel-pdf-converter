@@ -3,12 +3,6 @@ import puppeteer from 'puppeteer-core'
 import { executablePath } from 'puppeteer'
 
 async function getBrowser() {
-  // 	//npx playwright install
-  //   const browser = await chromium.launch({
-  //     args: ['--no-sandbox'], // Add any additional args you need
-  //   })
-  //   return browser
-
   //   // local development is broken for this 👇
   //   // but it works in vercel so I'm not gonna touch it
   return puppeteer.launch({
