@@ -29,11 +29,14 @@ module.exports = async (req, res) => {
 
     const isDev = req?.headers?.host?.startsWith('localhost') ?? false
     const pdfStream = await getPdfStream(url, isDev)
-
+    console.log('pdf stream start!')
     // pdfStream.pipe(res)
 
+    let i = 1
     return new Promise((resolve, reject) => {
       pdfStream.on('data', (chunk) => {
+        console.log(`Chunk ${i} (${chunk.length} bytes)`)
+        i++
         // console.log('new chunk')
         // Check if the response is still writable
         if (!res.writable) {
