@@ -30,7 +30,32 @@ module.exports = async (req, res) => {
     const isDev = req?.headers?.host?.startsWith('localhost') ?? false
     const pdfStream = await getPdfStream(url, isDev)
 
-    pdfStream.pipe(res)
+    // pdfStream.pipe(res)
+
+    return new Promise((resolve, reject) => {
+      pdfStream.on('data', (chunk) => {
+        // console.log('new chunk')
+        // Check if the response is still writable
+        if (!res.writable) {
+          pdfStream.destroy() // Close the PDF stream if the response is closed
+          reject(new Error('Response closed prematurely.'))
+        } else {
+          // Write the chunk to the response
+          res.write(chunk)
+        }
+      })
+
+      pdfStream.on('end', () => {
+        // End the response when all chunks are sent
+        res.end()
+        resolve()
+      })
+
+      pdfStream.on('error', (error) => {
+        // Handle errors during streaming
+        reject(error)
+      })
+    })
   } catch (err) {
     if (
       err.message ===
