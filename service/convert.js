@@ -2,6 +2,7 @@ import chromium from '@sparticuz/chromium-min'
 import puppeteer from 'puppeteer-core'
 import { executablePath } from 'puppeteer'
 import Jimp from 'jimp'
+import JPEG from 'jpeg-js'
 
 async function getBrowser(isDev = false) {
   const params = {
@@ -133,8 +134,8 @@ export const getCompressedPdf = async (res, url, isDev) => {
   const page = await browser.newPage()
 
   const imgBuffer = await getImageAsBuffer(url)
-  const mimeType =
-    url.endsWith('.jpg') || url.endsWith('.jpeg') ? 'image/jpeg' : 'image/png'
+  // const mimeType =
+  //   url.endsWith('.jpg') || url.endsWith('.jpeg') ? 'image/jpeg' : 'image/png'
 
   // Error: maxMemoryUsageInMB limit exceeded by at least 8MB
   // Convert ArrayBuffer to Buffer
@@ -145,6 +146,9 @@ export const getCompressedPdf = async (res, url, isDev) => {
   //     maxMemoryUsageInMB: 1024
   //   })
   // }
+  Jimp.decoders['image/jpeg'] = (data) =>
+    JPEG.decode(data, { maxMemoryUsageInMB: 1024 })
+
   let image = await Jimp.read(imgBufferAsBuffer)
   image = await image.resize(400, Jimp.AUTO)
   image = await image.greyscale()

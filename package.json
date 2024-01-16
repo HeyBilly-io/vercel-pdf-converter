@@ -12,6 +12,7 @@
   "dependencies": {
     "@sparticuz/chromium-min": "^119.0.2",
     "jimp": "^0.22.10",
+    "jpeg-js": "^0.4.4",
     "puppeteer": "^21.6.1",
     "puppeteer-core": "^21.6.1",
     "puppeteer-extra": "^3.3.6",
