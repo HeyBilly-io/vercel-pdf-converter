@@ -1,7 +1,6 @@
 import chromium from '@sparticuz/chromium-min'
 import puppeteer from 'puppeteer-core'
 import { executablePath } from 'puppeteer'
-const { Readable } = require('stream')
 
 async function getBrowser(isDev = false) {
   const params = {
@@ -142,7 +141,7 @@ export const getCompressedPdf = async (url, isDev) => {
 
   // Convert Buffer to base64
   const base64Image = imgBufferAsBuffer.toString('base64')
-  const htmlImage = `<img src="data:${mimeType};base64,${base64Image}">`
+  const htmlImage = `<img style="width: 100%;" src="data:${mimeType};base64,${base64Image}">`
 
 
   await page.setContent(htmlImage)
