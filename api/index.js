@@ -68,7 +68,8 @@ module.exports = async (req, res) => {
 
     // return await sendPdfStream(url, isDev);
     // const pdfBuffer = await getPdf(url, isDev)
-    const pdfBuffer = await getCompressedPdf(url, isDev)
+    const pdfBuffer = await getCompressedPdf(res, url, isDev)
+    //5039028
     console.log(pdfBuffer.byteLength)
 
     if (!pdfBuffer) return res.status(400).send('Error: could not generate PDF')

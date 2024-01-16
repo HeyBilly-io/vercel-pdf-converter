@@ -1,6 +1,7 @@
 import chromium from '@sparticuz/chromium-min'
 import puppeteer from 'puppeteer-core'
 import { executablePath } from 'puppeteer'
+import Jimp from 'jimp'
 
 async function getBrowser(isDev = false) {
   const params = {
@@ -126,23 +127,37 @@ async function getImageAsBuffer(url) {
   }
 }
 
-export const getCompressedPdf = async (url, isDev) => {
+export const getCompressedPdf = async (res, url, isDev) => {
   // Start headless chrome instance
   const browser = await getBrowser(isDev)
   const page = await browser.newPage()
-
 
   const imgBuffer = await getImageAsBuffer(url)
   const mimeType =
     url.endsWith('.jpg') || url.endsWith('.jpeg') ? 'image/jpeg' : 'image/png'
 
+  // Error: maxMemoryUsageInMB limit exceeded by at least 8MB
   // Convert ArrayBuffer to Buffer
   const imgBufferAsBuffer = Buffer.from(imgBuffer)
 
-  // Convert Buffer to base64
-  const base64Image = imgBufferAsBuffer.toString('base64')
-  const htmlImage = `<img style="width: 100%;" src="data:${mimeType};base64,${base64Image}">`
+  // Jimp.decoders['image/jpeg'] = (data) => {
+  //   return JimpJPEG.decode(data, {
+  //     maxMemoryUsageInMB: 1024
+  //   })
+  // }
+  let image = await Jimp.read(imgBufferAsBuffer)
+  image = await image.resize(400, Jimp.AUTO)
+  image = await image.greyscale()
 
+  // Convert resized image to base64
+  const base64Image = await image.getBase64Async(Jimp.AUTO)
+  // console.log(base64Image)
+  const htmlImage = `<img style="width: 100%;" src="${base64Image}">`
+  // res.send(htmlImage);
+  // return res
+  // Convert Buffer to base64
+  // const base64Image = imgBufferAsBuffer.toString('base64')
+  // const htmlImage = `<img style="width: 100%;" src="data:${mimeType};base64,${base64Image}">`
 
   await page.setContent(htmlImage)
 
