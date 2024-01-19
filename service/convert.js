@@ -150,7 +150,7 @@ export const getCompressedPdf = async (res, url, isDev) => {
     JPEG.decode(data, { maxMemoryUsageInMB: 1024 })
 
   let image = await Jimp.read(imgBufferAsBuffer)
-  image = await image.resize(400, Jimp.AUTO)
+  image = await image.resize(1000, Jimp.AUTO)
   image = await image.greyscale()
 
   // Convert resized image to base64
